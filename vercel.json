@@ -1,0 +1,6 @@
+{
+  "framework": null,
+  "installCommand": "echo 'Site estático — nada para instalar'",
+  "buildCommand": "echo 'Site estático — nenhum build necessário'",
+  "outputDirectory": "docs"
+}
