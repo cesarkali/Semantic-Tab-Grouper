@@ -1,8 +1,11 @@
 // Gera a imagem de Open Graph / Twitter Card (1200x630) para o site,
 // reaproveitando os mesmos tokens visuais e helpers dos outros geradores.
 import sharp from 'sharp';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const OUT = 'c:/Dev/agrupador/docs/og-image.png';
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const OUT = path.join(ROOT, 'docs', 'og-image.png');
 const FONT = "Arial, 'Segoe UI', sans-serif";
 
 const BACKDROP = '#0a0a0c';

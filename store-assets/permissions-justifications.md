@@ -4,11 +4,22 @@ Cole estes textos nos campos correspondentes do Developer Dashboard
 (aba "Privacy practices" / "Justificativa de permissão" de cada item em
 `manifest.json`).
 
-## Descrição de propósito único (Single purpose)
+## Único propósito
 
-Agrupa automaticamente as abas abertas por assunto, usando um modelo de
-IA que roda inteiramente dentro do navegador — nenhum dado de navegação
-é enviado para servidores externos.
+> Uma extensão precisa ter um único propósito que seja limitado e fácil
+> de entender. [Saiba mais](https://developer.chrome.com/docs/webstore/program-policies/single-purpose)
+
+Cole no campo **"Descrição do único propósito"** do dashboard:
+
+> Agrupa automaticamente as abas abertas por assunto, usando um modelo
+> de IA que roda inteiramente dentro do navegador — nenhum dado de
+> navegação é enviado para servidores externos.
+
+Esse é o teste que o revisor da loja aplica: cada permissão pedida (veja
+abaixo) precisa servir só a esse único propósito — "agrupar abas por
+assunto". Se alguma permissão parecer servir a outra coisa (ex.: métricas,
+anúncios, funcionalidades não relacionadas), o item é rejeitado. Todas as
+justificativas abaixo foram escritas amarradas a esse mesmo propósito.
 
 ## Justificativas de permissão
 
@@ -55,6 +66,16 @@ Marque **"Não vendemos nem transferimos dados do usuário para
 terceiros"** e **"Não usamos nem transferimos dados do usuário para
 finalidades não relacionadas ao propósito único do item"** — ambas as
 afirmações são verdadeiras para esta extensão.
+
+## Campo "Privacy policy URL"
+
+Também obrigatório nesta mesma aba. Cole a URL da política já pronta em
+`docs/privacy-policy.html`:
+
+> https://stg.caliberda.com.br/privacy-policy.html
+
+(Só funciona depois que o domínio estiver publicado — até lá, o arquivo
+pode ser revisado localmente ou publicado num link temporário.)
 
 ---
 

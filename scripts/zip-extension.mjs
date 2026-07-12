@@ -5,8 +5,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import zlib from 'node:zlib';
+import { fileURLToPath } from 'node:url';
 
-const ROOT = 'c:/Dev/agrupador';
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST_DIR = path.join(ROOT, 'dist');
 const OUT_DIR = path.join(ROOT, 'releases');
 
