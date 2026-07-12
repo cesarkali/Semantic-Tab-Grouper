@@ -72,7 +72,7 @@ afirmações são verdadeiras para esta extensão.
 Também obrigatório nesta mesma aba. Cole a URL da política já pronta em
 `docs/privacy-policy.html`:
 
-> https://stg.caliberda.com.br/privacy-policy.html
+> https://stg.caliberda.com.br/privacy-policy
 
 (Só funciona depois que o domínio estiver publicado — até lá, o arquivo
 pode ser revisado localmente ou publicado num link temporário.)
