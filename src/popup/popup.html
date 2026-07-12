@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Semantic Tab Grouper</title>
+    <style>
+      :root {
+        --bg: #ffffff; --surface: #f6f8f7; --surface-2: #eef1ef; --border: rgba(10,20,15,0.14);
+        --text: #0c1210; --text-muted: #5b6663; --accent: #16a34a; --accent-ink: #ffffff;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0f1416; --surface: #171e20; --surface-2: #1e2628; --border: rgba(255,255,255,0.12);
+          --text: #eef2f1; --text-muted: #8a9694; --accent: #34d071; --accent-ink: #06210f;
+        }
+      }
+      * { box-sizing: border-box; }
+      body {
+        width: 320px;
+        font: 13px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif;
+        margin: 0; padding: 16px;
+        background: var(--bg); color: var(--text);
+      }
+      ::-webkit-scrollbar { width: 8px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 999px; }
+      ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+      .head { display: flex; align-items: center; gap: 9px; margin-bottom: 4px; }
+      .logo-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); flex: none; }
+      h1 { font-size: 13.5px; font-weight: 700; margin: 0; letter-spacing: -0.01em; }
+      .row { display: flex; align-items: center; justify-content: space-between; margin: 14px 0 12px; }
+      .row-label { font-size: 12.5px; color: var(--text-muted); font-weight: 500; }
+      .switch { position: relative; width: 34px; height: 20px; flex: none; }
+      .switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+      .switch .track { position: absolute; inset: 0; background: var(--surface-2); border: 1px solid var(--border); border-radius: 999px; cursor: pointer; transition: 0.15s; }
+      .switch .track::before { content: ''; position: absolute; width: 14px; height: 14px; left: 2px; top: 2px; background: #fff; border-radius: 50%; transition: 0.15s; box-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+      .switch input:checked + .track { background: var(--accent); border-color: transparent; }
+      .switch input:checked + .track::before { transform: translateX(14px); }
+
+      .section-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 700; margin: 4px 0 8px; }
+
+      .suggestions { display: flex; flex-direction: column; gap: 8px; margin-bottom: 4px; max-height: 320px; overflow-y: auto; }
+      .empty-state {
+        font-size: 12px; color: var(--text-muted); text-align: center; padding: 16px 8px;
+        background: var(--surface); border: 1px dashed var(--border); border-radius: 10px;
+      }
+      .suggestion-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
+      .suggestion-top { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+      .suggestion-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+      .suggestion-label { font-weight: 700; font-size: 12.5px; flex: 1; }
+      .suggestion-count { font-size: 10.5px; color: var(--text-muted); font-family: ui-monospace, monospace; }
+      .suggestion-titles { font-size: 11px; color: var(--text-muted); margin: 0 0 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .suggestion-actions { display: flex; gap: 6px; }
+      .suggestion-actions button {
+        flex: 1; font-size: 11px; font-weight: 600; padding: 6px 0; border-radius: 7px; border: 1px solid var(--border);
+        cursor: pointer; background: var(--surface-2); color: var(--text);
+      }
+      .suggestion-actions .accept { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+
+      .edit-hint { font-size: 11px; color: var(--text-muted); margin: 0 0 8px; font-weight: 500; }
+      .edit-list { display: flex; flex-direction: column; gap: 5px; max-height: 150px; overflow-y: auto; margin-bottom: 10px; }
+      .edit-row { display: flex; align-items: center; gap: 8px; font-size: 11.5px; padding: 4px 2px; cursor: pointer; }
+      .edit-row input { accent-color: var(--accent); flex: none; }
+      .edit-row span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+      button.primary {
+        width: 100%; padding: 10px; border-radius: 8px; font-weight: 600; cursor: pointer;
+        background: var(--surface); border: 1px solid var(--border); color: var(--text); margin-top: 4px;
+        transition: border-color 0.15s ease;
+      }
+      button.primary:hover { border-color: var(--text-muted); }
+      button.primary:disabled { opacity: 0.6; cursor: default; }
+      #status { min-height: 14px; font-size: 11px; color: var(--text-muted); margin: 6px 0 2px; font-weight: 500; }
+      a.footer-link { display: block; text-align: center; font-size: 11.5px; color: var(--text-muted); font-weight: 600; margin-top: 10px; }
+      a.footer-link:hover { color: var(--text); }
+    </style>
+  </head>
+  <body>
+    <div class="head">
+      <svg width="20" height="20" viewBox="0 0 64 64" aria-hidden="true" style="flex:none;">
+        <defs><linearGradient id="lg-pop" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#1fb85c"/><stop offset="1" stop-color="#128a3e"/>
+        </linearGradient></defs>
+        <rect width="64" height="64" rx="14.5" fill="url(#lg-pop)"/>
+        <rect x="14" y="16.5" width="10" height="12" rx="3" fill="#fff"/>
+        <rect x="27" y="16.5" width="10" height="12" rx="3" fill="#fff"/>
+        <rect x="40" y="16.5" width="10" height="12" rx="3" fill="#fff"/>
+        <rect x="14" y="36" width="36" height="12.5" rx="6.25" fill="#fff"/>
+      </svg>
+      <h1>Semantic Tab Grouper</h1>
+    </div>
+
+    <div class="row">
+      <span class="row-label">Detector ativo</span>
+      <label class="switch">
+        <input type="checkbox" id="enabled" />
+        <span class="track"></span>
+      </label>
+    </div>
+
+    <p class="section-label" id="suggestions-label">Sugestões</p>
+    <div class="suggestions" id="suggestions"></div>
+
+    <button class="primary" id="regroup">Analisar abas agora</button>
+    <div id="status"></div>
+    <a href="#" class="footer-link" id="open-options">Configurações avançadas</a>
+
+    <script type="module" src="./popup.js"></script>
+  </body>
+</html>
