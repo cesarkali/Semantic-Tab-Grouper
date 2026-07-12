@@ -5,6 +5,9 @@ const OFFSCREEN_URL = chrome.runtime.getURL('src/offscreen/offscreen.html');
 const OFFSCREEN_IDLE_ALARM = 'close-offscreen-idle';
 const OFFSCREEN_IDLE_MINUTES = 1;
 
+const PERIODIC_CHECK_ALARM = 'periodic-tab-check';
+const MIN_AUTO_CHECK_MINUTES = 1; // chrome.alarms não permite recorrência menor que 1 minuto
+
 const GROUP_COLORS = ['grey', 'blue', 'red', 'yellow', 'green', 'pink', 'purple', 'cyan', 'orange'];
 
 // Estado em memória: uma aba fechada/o service worker reiniciando limpa tudo,
@@ -49,9 +52,37 @@ function scheduleOffscreenShutdown() {
   chrome.alarms.create(OFFSCREEN_IDLE_ALARM, { delayInMinutes: OFFSCREEN_IDLE_MINUTES });
 }
 
+// Agenda a verificação periódica: a próxima checagem acontece só depois de
+// `minutes` a partir de agora — a checagem imediata (na instalação) é
+// disparada à parte, não por este alarme.
+function schedulePeriodicCheck(minutes) {
+  const period = Math.max(MIN_AUTO_CHECK_MINUTES, Number(minutes) || 5);
+  chrome.alarms.create(PERIODIC_CHECK_ALARM, { delayInMinutes: period, periodInMinutes: period });
+}
+
+async function runPeriodicCheck() {
+  const settings = await getSettings();
+  if (!settings.enabled) return;
+  await regroupAllOpenTabs();
+}
+
 chrome.alarms.onAlarm.addListener(async (alarm) => {
   if (alarm.name === OFFSCREEN_IDLE_ALARM && (await hasOffscreenDocument())) {
     await chrome.offscreen.closeDocument();
+  }
+  if (alarm.name === PERIODIC_CHECK_ALARM) {
+    runPeriodicCheck().catch((err) => console.error('[Semantic Tab Grouper] Falha na verificação periódica:', err));
+  }
+});
+
+// Se o usuário mudar o intervalo nas configurações, reagenda o alarme com o
+// novo período (sem reagendar à toa quando outro campo qualquer é salvo).
+chrome.storage.onChanged.addListener((changes, areaName) => {
+  if (areaName !== 'sync' || !changes.settings) return;
+  const oldMinutes = changes.settings.oldValue?.autoCheckMinutes;
+  const newMinutes = changes.settings.newValue?.autoCheckMinutes;
+  if (newMinutes && newMinutes !== oldMinutes) {
+    schedulePeriodicCheck(newMinutes);
   }
 });
 
@@ -94,15 +125,53 @@ function colorForLabel(label) {
   return GROUP_COLORS[Math.abs(hash) % GROUP_COLORS.length];
 }
 
+// Palavras comuns demais para virarem "o tema" do grupo (PT-BR + EN básico).
+const STOPWORDS = new Set([
+  'de', 'da', 'do', 'das', 'dos', 'em', 'no', 'na', 'nos', 'nas', 'um', 'uma', 'uns', 'umas',
+  'para', 'com', 'sem', 'por', 'que', 'como', 'mais', 'menos', 'ou', 'mas', 'se', 'sua', 'seu',
+  'suas', 'seus', 'ao', 'aos', 'à', 'às', 'é', 'são', 'foi', 'ser', 'está', 'estão', 'the', 'and',
+  'for', 'to', 'of', 'in', 'on', 'at', 'is', 'are', 'how', 'what', 'why', 'your', 'you', 'with',
+  'from', 'this', 'that', 'it', 'an', 'com'
+]);
+
+// Conta palavras compartilhadas por pelo menos duas abas do grupo — é assim
+// que "Passagens" e "voos" viram o nome, em vez de cada aba contribuir só
+// com seu próprio domínio.
+function extractKeywords(titles) {
+  const perTitleWords = titles.map(
+    (t) => new Set((t.toLowerCase().match(/\p{L}+/gu) || []).filter((w) => w.length >= 3 && !STOPWORDS.has(w)))
+  );
+  const freq = new Map();
+  for (const words of perTitleWords) {
+    for (const w of words) freq.set(w, (freq.get(w) || 0) + 1);
+  }
+  const minShared = titles.length >= 2 ? 2 : 1;
+  return [...freq.entries()]
+    .filter(([, count]) => count >= minShared)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 2)
+    .map(([w]) => w);
+}
+
+function capitalize(w) {
+  return w.charAt(0).toUpperCase() + w.slice(1);
+}
+
 function labelForGroup(members) {
+  const titles = members.map((m) => m.title || '').filter(Boolean);
+
+  const keywords = extractKeywords(titles);
+  if (keywords.length > 0) {
+    return keywords.map(capitalize).join(' · ');
+  }
+
+  // Sem palavra em comum nos títulos: cai para o domínio (se só houver um)
+  // ou para o título mais curto, como antes.
   const domains = new Set(members.map((m) => m.domain));
   if (domains.size === 1) {
     return [...domains][0];
   }
-  const shortestTitle = members
-    .map((m) => m.title || '')
-    .filter(Boolean)
-    .sort((a, b) => a.length - b.length)[0];
+  const shortestTitle = [...titles].sort((a, b) => a.length - b.length)[0];
   if (!shortestTitle) return 'Grupo';
   return shortestTitle.length > 24 ? `${shortestTitle.slice(0, 24)}…` : shortestTitle;
 }
@@ -451,4 +520,7 @@ chrome.runtime.onInstalled.addListener(async () => {
   updateBadge();
   const settings = await getSettings();
   console.log('[Semantic Tab Grouper] instalado. Configurações atuais:', settings);
+
+  await runPeriodicCheck(); // consulta imediata, já na instalação
+  schedulePeriodicCheck(settings.autoCheckMinutes);
 });
