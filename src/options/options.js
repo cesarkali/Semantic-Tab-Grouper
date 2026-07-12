@@ -24,7 +24,8 @@ function currentFormState() {
       .split('\n')
       .map((d) => d.trim().toLowerCase())
       .filter(Boolean),
-    minGroupSize: Number(document.querySelector('input[name="mgs"]:checked')?.value || 2)
+    minGroupSize: Number(document.querySelector('input[name="mgs"]:checked')?.value || 2),
+    autoCheckMinutes: Number(document.querySelector('input[name="acm"]:checked')?.value || 5)
   };
 }
 
@@ -37,6 +38,7 @@ function isDirty() {
     current.mode !== loaded.mode ||
     current.threshold !== loaded.threshold ||
     current.minGroupSize !== loaded.minGroupSize ||
+    current.autoCheckMinutes !== loaded.autoCheckMinutes ||
     current.ignoredDomains.join('\n') !== loaded.ignoredDomains.join('\n')
   );
 }
@@ -81,6 +83,11 @@ function setMinGroupSize(size) {
   if (input) input.checked = true;
 }
 
+function setAutoCheckMinutes(minutes) {
+  const input = document.querySelector(`input[name="acm"][value="${minutes}"]`);
+  if (input) input.checked = true;
+}
+
 async function load() {
   const settings = await getSettings();
   loaded = settings;
@@ -93,6 +100,7 @@ async function load() {
   ignoredDomainsInput.value = settings.ignoredDomains.join('\n');
   renderChips();
   setMinGroupSize(settings.minGroupSize);
+  setAutoCheckMinutes(settings.autoCheckMinutes);
 
   refreshDirtyState();
 }
@@ -107,7 +115,7 @@ ignoredDomainsInput.addEventListener('input', () => {
   refreshDirtyState();
 });
 
-document.querySelectorAll('input[name="mode"], input[name="mgs"], input[name="apply-mode"]').forEach((input) => {
+document.querySelectorAll('input[name="mode"], input[name="mgs"], input[name="apply-mode"], input[name="acm"]').forEach((input) => {
   input.addEventListener('change', refreshDirtyState);
 });
 enabledToggle.addEventListener('change', refreshDirtyState);

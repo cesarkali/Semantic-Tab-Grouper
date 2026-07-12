@@ -10,7 +10,10 @@ export const DEFAULT_SETTINGS = {
   minGroupSize: 2,
   // true  -> o detector só sugere (badge + lista no popup), você aceita ou ignora
   // false -> agrupa direto, sem pedir confirmação
-  suggestOnly: true
+  suggestOnly: true,
+  // intervalo (em minutos) da verificação periódica automática de todas as
+  // abas abertas — roda também uma vez, imediatamente, na instalação
+  autoCheckMinutes: 5
 };
 
 const SETTINGS_KEY = 'settings';

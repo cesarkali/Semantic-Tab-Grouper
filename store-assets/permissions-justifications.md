@@ -6,14 +6,12 @@ Cole estes textos nos campos correspondentes do Developer Dashboard
 
 ## Único propósito
 
-> Uma extensão precisa ter um único propósito que seja limitado e fácil
-> de entender. [Saiba mais](https://developer.chrome.com/docs/webstore/program-policies/single-purpose)
+Aviso do dashboard: "Uma extensão precisa ter um único propósito que
+seja limitado e fácil de entender." ([saiba mais](https://developer.chrome.com/docs/webstore/program-policies/single-purpose))
 
 Cole no campo **"Descrição do único propósito"** do dashboard:
 
-> Agrupa automaticamente as abas abertas por assunto, usando um modelo
-> de IA que roda inteiramente dentro do navegador — nenhum dado de
-> navegação é enviado para servidores externos.
+Agrupa automaticamente as abas abertas por assunto, usando um modelo de IA que roda inteiramente dentro do navegador — nenhum dado de navegação é enviado para servidores externos.
 
 Esse é o teste que o revisor da loja aplica: cada permissão pedida (veja
 abaixo) precisa servir só a esse único propósito — "agrupar abas por
@@ -43,7 +41,19 @@ Service workers do Manifest V3 não podem usar `setTimeout` de forma confiável 
 
 ## Justificativa de host permission (`<all_urls>`)
 
-A extensão precisa poder ler o conteúdo textual de qualquer página que o usuário abra, já que não há como prever de antemão em qual site o usuário vai querer que a detecção de assunto funcione. O texto extraído nunca sai do navegador — é processado localmente por um modelo rodando via WebAssembly. Domínios sensíveis (bancos, e-mail, intranet etc.) podem ser excluídos manualmente pelo próprio usuário na tela de configurações.
+Se a loja avisar "Permissões amplas do host" / sugerir `activeTab` ou
+uma lista fixa de sites: nenhuma das duas alternativas cobre o
+propósito único desta extensão — o texto abaixo já responde a isso.
+Limite do campo no dashboard: **1000 caracteres** (o texto abaixo tem
+909).
+
+Cole no campo **"Justificativa de host permission"**:
+
+O propósito único da extensão é detectar automaticamente, ao carregar uma aba, se o assunto dela é parecido com o de outras abas já abertas — sem exigir ação do usuário. Isso exige ler o conteúdo da página no momento do carregamento, em qualquer site, já que não há como prever quais domínios o usuário vai querer agrupar.
+
+activeTab não atende: só libera acesso quando o usuário interage com a extensão, o que tornaria a detecção automática impossível — o usuário teria que clicar manualmente em cada aba, exatamente o que a extensão existe para eliminar. Uma lista fixa de sites também não atende, pois a extensão é de propósito geral e precisa funcionar em qualquer site aberto pelo usuário.
+
+O texto extraído nunca sai do navegador: é processado localmente via WebAssembly. Domínios sensíveis podem ser excluídos pelo usuário nas configurações, que também permitem desativar o detector a qualquer momento.
 
 ## "Este item usa código remoto?" (Remote code)
 
@@ -72,7 +82,7 @@ afirmações são verdadeiras para esta extensão.
 Também obrigatório nesta mesma aba. Cole a URL da política já pronta em
 `docs/privacy-policy.html`:
 
-> https://stg.caliberda.com.br/privacy-policy
+https://stg.caliberda.com.br/privacy-policy
 
 (Só funciona depois que o domínio estiver publicado — até lá, o arquivo
 pode ser revisado localmente ou publicado num link temporário.)
