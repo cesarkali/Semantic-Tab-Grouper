@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Política de Privacidade — Semantic Tab Grouper</title>
+<meta name="description" content="Política de privacidade do Semantic Tab Grouper: o que a extensão acessa, como processa e por que nada disso sai do seu navegador." />
+<link rel="canonical" href="https://stg.caliberda.com.br/privacy-policy.html" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+<meta name="theme-color" content="#16a34a" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+<meta name="robots" content="index,follow" />
+<style>
+  :root {
+    --bg: #ffffff; --bg-alt: #f5f5f7; --text: #1d1d1f; --muted: #6e6e73;
+    --accent: #16a34a; --accent-ink: #ffffff; --border: rgba(0,0,0,0.10);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #000000; --bg-alt: #0e0e10; --text: #f5f5f7; --muted: #a1a1a6; --accent: #34d071; --accent-ink: #06210f; --border: rgba(255,255,255,0.14); }
+  }
+  :root[data-theme="dark"] { --bg: #000000; --bg-alt: #0e0e10; --text: #f5f5f7; --muted: #a1a1a6; --accent: #34d071; --accent-ink: #06210f; --border: rgba(255,255,255,0.14); }
+  :root[data-theme="light"] { --bg: #ffffff; --bg-alt: #f5f5f7; --text: #1d1d1f; --muted: #6e6e73; --accent: #16a34a; --accent-ink: #ffffff; --border: rgba(0,0,0,0.10); }
+
+  * { box-sizing: border-box; }
+  html { color-scheme: light dark; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  header.top { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 80%, transparent); backdrop-filter: blur(14px); border-bottom: 1px solid var(--border); }
+  .top-row { display: flex; align-items: center; justify-content: space-between; max-width: 760px; margin: 0 auto; padding: 16px 24px; }
+  .logo { display: flex; align-items: center; gap: 9px; font-weight: 600; font-size: 14.5px; }
+  .back { font-size: 13.5px; font-weight: 600; color: var(--muted); }
+  .back:hover { color: var(--text); }
+
+  main { max-width: 760px; margin: 0 auto; padding: 56px 24px 100px; }
+
+  .eyebrow { font-size: 13.5px; font-weight: 700; color: var(--accent); letter-spacing: 0.04em; text-transform: uppercase; margin: 0 0 12px; }
+  h1 { font-size: clamp(30px, 4.4vw, 42px); font-weight: 700; letter-spacing: -0.02em; margin: 0 0 10px; }
+  .updated { font-size: 14px; color: var(--muted); margin: 0 0 8px; }
+  .lede { font-size: 17px; color: var(--muted); max-width: 62ch; margin: 24px 0 0; }
+
+  nav.toc { background: var(--bg-alt); border: 1px solid var(--border); border-radius: 14px; padding: 20px 24px; margin: 36px 0 48px; }
+  nav.toc h2 { font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); font-weight: 700; margin: 0 0 12px; }
+  nav.toc ol { margin: 0; padding: 0 0 0 18px; columns: 2; column-gap: 24px; font-size: 14.5px; }
+  nav.toc li { margin-bottom: 8px; break-inside: avoid; }
+
+  section.pol { margin: 44px 0; scroll-margin-top: 76px; }
+  section.pol h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; margin: 0 0 14px; }
+  section.pol p, section.pol li { font-size: 16px; color: var(--text); }
+  section.pol p { margin: 0 0 14px; max-width: 68ch; }
+  section.pol ul { margin: 0 0 14px; padding-left: 22px; max-width: 66ch; }
+  section.pol li { margin-bottom: 8px; }
+  section.pol strong { font-weight: 650; }
+  code { font-family: ui-monospace, "SF Mono", Consolas, monospace; font-size: 0.92em; background: var(--bg-alt); padding: 2px 6px; border-radius: 5px; }
+
+  table.data { width: 100%; border-collapse: collapse; margin: 8px 0 18px; font-size: 14.5px; }
+  table.data th, table.data td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  table.data th { color: var(--muted); font-weight: 700; font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.03em; }
+
+  .callout { background: var(--bg-alt); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 10px; padding: 16px 20px; margin: 0 0 14px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  hr.rule { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+  footer { border-top: 1px solid var(--border); padding: 28px 0 40px; }
+  .footer-row { max-width: 760px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-size: 12.5px; color: var(--muted); }
+  .footer-row a { font-weight: 600; color: var(--text); }
+  .footer-row a:hover { color: var(--accent); }
+
+  @media (max-width: 560px) {
+    nav.toc ol { columns: 1; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-row">
+    <a class="logo" href="index.html">
+      <svg width="22" height="22" viewBox="0 0 64 64" aria-hidden="true">
+        <defs><linearGradient id="lg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1fb85c"/><stop offset="1" stop-color="#128a3e"/></linearGradient></defs>
+        <rect width="64" height="64" rx="14.5" fill="url(#lg)"/>
+        <rect x="14" y="16.5" width="10" height="12" rx="3" fill="#fff"/>
+        <rect x="27" y="16.5" width="10" height="12" rx="3" fill="#fff"/>
+        <rect x="40" y="16.5" width="10" height="12" rx="3" fill="#fff"/>
+        <rect x="14" y="36" width="36" height="12.5" rx="6.25" fill="#fff"/>
+      </svg>
+      Semantic Tab Grouper
+    </a>
+    <a class="back" href="index.html">← Voltar ao site</a>
+  </div>
+</header>
+
+<main>
+  <p class="eyebrow">Legal</p>
+  <h1>Política de Privacidade</h1>
+  <p class="updated">Última atualização: 12 de julho de 2026</p>
+  <p class="lede">Em uma frase: o Semantic Tab Grouper lê o conteúdo das abas abertas para entender o assunto e sugerir agrupamentos — e faz isso inteiramente dentro do seu navegador. Nada do que a extensão lê é enviado, vendido ou compartilhado com nós ou com terceiros.</p>
+
+  <nav class="toc" aria-label="Sumário">
+    <h2>Nesta página</h2>
+    <ol>
+      <li><a href="#responsavel">Quem é responsável por esta extensão</a></li>
+      <li><a href="#dados-acessados">Quais dados a extensão acessa</a></li>
+      <li><a href="#processamento">Onde e como isso é processado</a></li>
+      <li><a href="#armazenamento">O que fica armazenado, e onde</a></li>
+      <li><a href="#terceiros">Compartilhamento com terceiros</a></li>
+      <li><a href="#servicos-terceiros">Serviços de terceiros utilizados</a></li>
+      <li><a href="#permissoes">Permissões do navegador</a></li>
+      <li><a href="#controles">Seus controles</a></li>
+      <li><a href="#retencao">Retenção e exclusão</a></li>
+      <li><a href="#seguranca">Segurança</a></li>
+      <li><a href="#criancas">Crianças</a></li>
+      <li><a href="#mudancas">Alterações nesta política</a></li>
+      <li><a href="#contato">Contato</a></li>
+    </ol>
+  </nav>
+
+  <section class="pol" id="responsavel">
+    <h2>1. Quem é responsável por esta extensão</h2>
+    <p>O Semantic Tab Grouper é desenvolvido e mantido por <strong>caliberda.com.br</strong>. O código-fonte é aberto e pode ser auditado por qualquer pessoa no repositório oficial: <a href="https://github.com/cesarkali/Semantic-Tab-Grouper" target="_blank" rel="noopener">github.com/cesarkali/Semantic-Tab-Grouper</a>.</p>
+  </section>
+
+  <section class="pol" id="dados-acessados">
+    <h2>2. Quais dados a extensão acessa</h2>
+    <p>Para funcionar, a extensão precisa ler, de cada aba aberta:</p>
+    <ul>
+      <li>A <strong>URL</strong> e o <strong>título</strong> da aba;</li>
+      <li>O <strong>texto principal do conteúdo</strong> da página, extraído com o Readability.js (o mesmo motor de "modo leitura" usado por navegadores) — menus, anúncios e rodapés são descartados.</li>
+    </ul>
+    <p>Esses dados são usados apenas para calcular do que a página trata e comparar esse assunto com o de outras abas abertas na mesma janela.</p>
+    <p>A extensão <strong>não</strong> lê senhas, campos de formulário, cookies, dados de autofill ou qualquer informação digitada pelo usuário — apenas o conteúdo visível da página, do mesmo jeito que o "modo leitura" do navegador faz.</p>
+  </section>
+
+  <section class="pol" id="processamento">
+    <h2>3. Onde e como isso é processado</h2>
+    <p>Todo o processamento acontece <strong>localmente, dentro do seu navegador</strong>, usando um modelo de linguagem (<code>Xenova/all-MiniLM-L6-v2</code>) rodando via WebAssembly num contexto isolado chamado offscreen document. Não existe backend, servidor ou API própria para onde o conteúdo das páginas seja enviado.</p>
+    <div class="callout">
+      <p>Em outras palavras: se você desconectar o computador da internet depois que o modelo já foi baixado uma vez, a extensão continua funcionando normalmente — porque ela não depende de nenhum servidor para analisar suas abas.</p>
+    </div>
+  </section>
+
+  <section class="pol" id="armazenamento">
+    <h2>4. O que fica armazenado, e onde</h2>
+    <table class="data">
+      <thead><tr><th>Dado</th><th>Onde fica</th><th>Sai do navegador?</th></tr></thead>
+      <tbody>
+        <tr><td>Configurações (modo de agrupamento, limiar, domínios ignorados etc.)</td><td><code>chrome.storage.sync</code></td><td>Não — sincroniza só entre os navegadores da própria conta do usuário, via infraestrutura do próprio Google/Microsoft/etc., nunca por nós</td></tr>
+        <tr><td>Cache de vetores de embedding (por URL, para não reprocessar a mesma página)</td><td><code>chrome.storage.local</code></td><td>Não — fica só no dispositivo</td></tr>
+        <tr><td>Texto extraído das páginas</td><td>Memória, durante a análise</td><td>Não — descartado depois de gerar o vetor, nunca é escrito em disco</td></tr>
+      </tbody>
+    </table>
+    <p>Nenhum desses dados passa por servidores da caliberda.com.br ou de qualquer parceiro nosso.</p>
+  </section>
+
+  <section class="pol" id="terceiros">
+    <h2>5. Compartilhamento com terceiros</h2>
+    <p>Não vendemos, alugamos ou compartilhamos dados do usuário com terceiros, para publicidade ou qualquer outra finalidade. Não existe telemetria, analytics ou rastreamento de uso embutido na extensão.</p>
+  </section>
+
+  <section class="pol" id="servicos-terceiros">
+    <h2>6. Serviços de terceiros utilizados</h2>
+    <p>Na primeira vez que a extensão analisa uma aba, ela baixa os pesos do modelo de IA (~25 MB) do CDN público do <a href="https://huggingface.co" target="_blank" rel="noopener">Hugging Face</a>. Esse download:</p>
+    <ul>
+      <li>Não envia texto de nenhuma página, URL visitada ou dado do usuário — é uma requisição de leitura de um arquivo público, igual baixar uma fonte ou uma biblioteca de terceiros;</li>
+      <li>Acontece uma única vez; o navegador guarda o arquivo em cache (Cache Storage) para as próximas vezes;</li>
+      <li>Está sujeito à política de privacidade da própria Hugging Face para a requisição em si (como o IP de origem), fora do nosso controle.</li>
+    </ul>
+  </section>
+
+  <section class="pol" id="permissoes">
+    <h2>7. Permissões do navegador</h2>
+    <p>A extensão solicita as permissões <code>tabs</code>, <code>tabGroups</code>, <code>scripting</code>, <code>offscreen</code>, <code>storage</code>, <code>alarms</code> e acesso a todos os sites (<code>&lt;all_urls&gt;</code>). Cada uma delas existe só para viabilizar ler, comparar e agrupar abas localmente — nenhuma é usada para coletar dados para fora do navegador. O detalhamento de por que cada permissão é necessária está documentado publicamente no repositório do projeto.</p>
+  </section>
+
+  <section class="pol" id="controles">
+    <h2>8. Seus controles</h2>
+    <ul>
+      <li><strong>Desativar o detector</strong> a qualquer momento, na tela de configurações;</li>
+      <li><strong>Excluir domínios específicos</strong> (bancos, e-mail, intranet etc.) da análise;</li>
+      <li><strong>Escolher o modo</strong> semântico, por domínio (sem IA) ou híbrido;</li>
+      <li><strong>Limpar o cache de embeddings</strong> com um clique, nas configurações;</li>
+      <li><strong>Desinstalar a extensão</strong> a qualquer momento — isso apaga todos os dados armazenados localmente por ela.</li>
+    </ul>
+  </section>
+
+  <section class="pol" id="retencao">
+    <h2>9. Retenção e exclusão de dados</h2>
+    <p>Configurações e cache de embeddings ficam salvos localmente até você limpá-los manualmente ou desinstalar a extensão. Não guardamos nenhuma cópia desses dados fora do seu navegador, então não há nada para "solicitar exclusão" além do que já está sob seu controle direto.</p>
+  </section>
+
+  <section class="pol" id="seguranca">
+    <h2>10. Segurança</h2>
+    <p>Como nenhum dado de navegação sai do dispositivo, a superfície de risco relevante é o próprio código da extensão. Ele é open source e pode ser auditado por qualquer pessoa, e o build publicado na Chrome Web Store é gerado a partir do mesmo código-fonte disponível no repositório público.</p>
+  </section>
+
+  <section class="pol" id="criancas">
+    <h2>11. Crianças</h2>
+    <p>Esta extensão não é direcionada a crianças e não coleta intencionalmente dados de menores de 13 anos.</p>
+  </section>
+
+  <section class="pol" id="mudancas">
+    <h2>12. Alterações nesta política</h2>
+    <p>Se esta política mudar, a data no topo desta página será atualizada. Mudanças relevantes na forma como a extensão trata dados também serão refletidas nas notas de versão do repositório.</p>
+  </section>
+
+  <hr class="rule" />
+
+  <section class="pol" id="contato">
+    <h2>13. Contato</h2>
+    <p>Dúvidas, pedidos ou relatos sobre esta política podem ser abertos como uma issue pública no repositório: <a href="https://github.com/cesarkali/Semantic-Tab-Grouper/issues" target="_blank" rel="noopener">github.com/cesarkali/Semantic-Tab-Grouper/issues</a>.</p>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-row">
+    <span>&copy; 2026 <a href="https://caliberda.com.br" target="_blank" rel="noopener">caliberda.com.br</a>. Todos os direitos reservados.</span>
+    <a href="index.html">Semantic Tab Grouper</a>
+  </div>
+</footer>
+
+</body>
+</html>

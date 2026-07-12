@@ -2,9 +2,12 @@
 // (aba do navegador, atalho no celular, PWA/manifest).
 import sharp from 'sharp';
 import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const SVG = fs.readFileSync('c:/Dev/agrupador/docs/favicon.svg');
-const OUT = 'c:/Dev/agrupador/docs';
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const OUT = path.join(ROOT, 'docs');
+const SVG = fs.readFileSync(path.join(OUT, 'favicon.svg'));
 
 const targets = [
   ['favicon-16.png', 16],

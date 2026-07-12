@@ -4,8 +4,10 @@
 import sharp from 'sharp';
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const OUT_DIR = 'c:/Dev/agrupador/store-assets';
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const OUT_DIR = path.join(ROOT, 'store-assets');
 fs.mkdirSync(OUT_DIR, { recursive: true });
 
 const FONT = "Arial, 'Segoe UI', sans-serif";
