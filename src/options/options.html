@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<title>Semantic Tab Grouper — Configurações</title>
+<style>
+  :root {
+    --bg: #ffffff; --surface: #f6f8f7; --surface-2: #eef1ef; --border: rgba(10,20,15,0.14);
+    --text: #0c1210; --text-muted: #5b6663; --accent: #16a34a; --accent-ink: #ffffff; --accent-soft: rgba(22,163,74,0.12);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0a0e0f; --surface: #12181a; --surface-2: #1a2224; --border: rgba(255,255,255,0.12);
+      --text: #eef2f1; --text-muted: #8a9694; --accent: #34d071; --accent-ink: #06210f; --accent-soft: rgba(52,208,113,0.14);
+    }
+  }
+  * { box-sizing: border-box; }
+  html { color-scheme: light dark; }
+  body {
+    margin: 0; min-height: 100vh; background: var(--bg); color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif; line-height: 1.5;
+  }
+  ::-webkit-scrollbar { width: 11px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 999px; border: 3px solid var(--bg); background-clip: padding-box; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); background-clip: padding-box; }
+
+  header.top { background: var(--bg); border-bottom: 1px solid var(--border); }
+  .top-row { display: flex; align-items: center; gap: 12px; padding: 20px 32px; max-width: 1040px; margin: 0 auto; }
+  .logo-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); flex: none; }
+  h1 { font-size: 17px; font-weight: 700; letter-spacing: -0.01em; margin: 0; }
+  .page-sub { color: var(--text-muted); font-size: 13.5px; margin: 3px 0 0; }
+
+  .shell { max-width: 1040px; margin: 0 auto; padding: 32px 32px 120px; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .card { border: 1px solid var(--border); border-radius: 12px; padding: 22px 24px; margin-bottom: 16px; background: var(--surface); }
+  .card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 4px; }
+  .card-title { font-size: 14.5px; font-weight: 700; margin: 0; }
+  .card-hint { color: var(--text-muted); font-size: 12.5px; margin: 4px 0 16px; }
+
+  .switch { position: relative; width: 38px; height: 22px; flex: none; }
+  .switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+  .switch .track { position: absolute; inset: 0; background: var(--surface-2); border: 1px solid var(--border); border-radius: 999px; cursor: pointer; transition: 0.15s; }
+  .switch .track::before { content: ''; position: absolute; width: 16px; height: 16px; left: 2px; top: 2px; background: #fff; border-radius: 50%; transition: 0.15s; box-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+  .switch input:checked + .track { background: var(--accent); border-color: transparent; }
+  .switch input:checked + .track::before { transform: translateX(16px); }
+
+  .segmented { display: grid; gap: 10px; }
+  .segmented.cols-2 { grid-template-columns: 1fr 1fr; }
+  .segmented.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .segmented label { display: flex; gap: 10px; align-items: flex-start; padding: 13px 15px; border-radius: 10px; border: 1px solid var(--border); cursor: pointer; transition: background 0.15s ease, border-color 0.15s ease; }
+  .segmented label:has(input:checked) { background: var(--accent-soft); border-color: var(--accent); }
+  .segmented input { margin-top: 3px; accent-color: var(--accent); flex: none; }
+  .segmented .opt-title { font-weight: 700; font-size: 13.5px; display: block; margin-bottom: 3px; }
+  .segmented .opt-desc { font-size: 12px; color: var(--text-muted); }
+
+  .threshold-visual { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; background: var(--surface-2); border-radius: 10px; padding: 14px; }
+  .threshold-visual .node { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+  .threshold-visual .node.a { background: var(--accent); }
+  .threshold-visual .node.b { background: #3b82f6; }
+  .threshold-visual .link { flex: 1; height: 2px; border-radius: 2px; background: var(--text-muted); transition: opacity 0.15s ease; }
+  .threshold-visual .link-label { font-family: ui-monospace, monospace; font-size: 11px; color: var(--text-muted); white-space: nowrap; }
+
+  input[type="range"] { width: 100%; accent-color: var(--accent); }
+  .threshold-row { display: flex; align-items: center; gap: 12px; }
+  #threshold-value { font-family: ui-monospace, monospace; font-weight: 700; font-size: 13px; min-width: 44px; text-align: right; color: var(--accent); }
+
+  textarea { width: 100%; box-sizing: border-box; font-size: 13.5px; font-family: ui-monospace, monospace; background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; color: var(--text); resize: vertical; min-height: 90px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; min-height: 20px; }
+  .chip { font-family: ui-monospace, monospace; font-size: 11.5px; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); border: 1px solid transparent; }
+
+  .pill-group { display: flex; gap: 8px; }
+  .pill-group label { flex: 1; text-align: center; padding: 10px; border-radius: 10px; border: 1px solid var(--border); cursor: pointer; font-size: 13px; font-weight: 600; transition: background 0.15s ease, border-color 0.15s ease; }
+  .pill-group label:has(input:checked) { background: var(--accent-soft); border-color: var(--accent); }
+  .pill-group input { position: absolute; opacity: 0; width: 0; height: 0; }
+
+  button.action { font-size: 13px; font-weight: 600; padding: 10px 18px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text); cursor: pointer; transition: border-color 0.15s ease; }
+  button.action:hover { border-color: var(--text-muted); }
+
+  .savebar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; display: flex; justify-content: center; transform: translateY(120%); transition: transform 0.25s ease; pointer-events: none; }
+  .savebar.visible { transform: translateY(0); pointer-events: auto; }
+  .savebar-inner { margin: 0 0 22px; display: flex; align-items: center; gap: 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 10px 10px 10px 20px; box-shadow: 0 16px 34px -16px rgba(0,0,0,0.35); }
+  .savebar-text { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+  .save-btn { font-size: 13.5px; font-weight: 700; padding: 10px 20px; border-radius: 999px; border: none; cursor: pointer; background: var(--accent); color: var(--accent-ink); }
+
+  .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-140%); background: var(--surface); border: 1px solid var(--accent); border-radius: 999px; padding: 10px 20px; font-size: 13px; font-weight: 600; color: var(--text); z-index: 20; transition: transform 0.25s ease; box-shadow: 0 12px 30px -12px rgba(0,0,0,0.3); }
+  .toast.visible { transform: translateX(-50%) translateY(0); }
+
+  @media (max-width: 760px) {
+    .grid-2, .segmented.cols-2, .segmented.cols-3 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast">Configurações salvas</div>
+
+<header class="top">
+  <div class="top-row">
+    <svg width="30" height="30" viewBox="0 0 64 64" aria-hidden="true" style="flex:none;">
+      <defs><linearGradient id="lg-opt" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#1fb85c"/><stop offset="1" stop-color="#128a3e"/>
+      </linearGradient></defs>
+      <rect width="64" height="64" rx="14.5" fill="url(#lg-opt)"/>
+      <rect x="14" y="16.5" width="10" height="12" rx="3" fill="#fff"/>
+      <rect x="27" y="16.5" width="10" height="12" rx="3" fill="#fff"/>
+      <rect x="40" y="16.5" width="10" height="12" rx="3" fill="#fff"/>
+      <rect x="14" y="36" width="36" height="12.5" rx="6.25" fill="#fff"/>
+    </svg>
+    <div>
+      <h1>Semantic Tab Grouper</h1>
+      <p class="page-sub">Ajuste como e quando suas abas são agrupadas automaticamente.</p>
+    </div>
+  </div>
+</header>
+
+<div class="shell">
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <p class="card-title">Detector ativo</p>
+          <p class="card-hint" style="margin-bottom:0;">Quando desligado, a extensão para de ler o conteúdo das páginas e de agrupar abas.</p>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="enabled" />
+          <span class="track"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="card-title">Como aplicar os grupos</p>
+      <p class="card-hint" style="margin-bottom:10px;">Escolha entre confirmar cada grupo ou deixar automático.</p>
+      <div class="segmented cols-2" id="apply-mode-group">
+        <label>
+          <input type="radio" name="apply-mode" value="suggest" />
+          <span>
+            <span class="opt-title">Notificar</span>
+            <span class="opt-desc">Aparece um número no ícone; você aceita, edita ou ignora.</span>
+          </span>
+        </label>
+        <label>
+          <input type="radio" name="apply-mode" value="auto" />
+          <span>
+            <span class="opt-title">Automático</span>
+            <span class="opt-desc">Agrupa direto, sem perguntar.</span>
+          </span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="card-title">Modo de agrupamento</p>
+    <p class="card-hint">Como a extensão decide que duas abas são "o mesmo assunto".</p>
+    <div class="segmented cols-3" id="mode-group">
+      <label>
+        <input type="radio" name="mode" value="semantic" />
+        <span>
+          <span class="opt-title">Semântico</span>
+          <span class="opt-desc">Pelo conteúdo, mesmo em domínios diferentes.</span>
+        </span>
+      </label>
+      <label>
+        <input type="radio" name="mode" value="domain" />
+        <span>
+          <span class="opt-title">Mesmo domínio</span>
+          <span class="opt-desc">Só pelo hostname — sem IA.</span>
+        </span>
+      </label>
+      <label>
+        <input type="radio" name="mode" value="hybrid" />
+        <span>
+          <span class="opt-title">Híbrido</span>
+          <span class="opt-desc">Mesmo domínio ou conteúdo parecido.</span>
+        </span>
+      </label>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="card-title">Sensibilidade semântica</p>
+    <p class="card-hint">Vale para os modos "Semântico" e "Híbrido". Quanto maior, mais parecidas as páginas precisam ser.</p>
+    <div class="threshold-visual">
+      <span class="node a"></span>
+      <span class="link" id="threshold-link"></span>
+      <span class="node b"></span>
+      <span class="link-label" id="threshold-sim-label">similaridade 0.65</span>
+    </div>
+    <div class="threshold-row">
+      <input type="range" id="threshold" min="0.3" max="0.95" step="0.01" />
+      <span id="threshold-value"></span>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <p class="card-title">Domínios ignorados</p>
+      <p class="card-hint">Um por linha. Nunca são lidos nem agrupados — bom para bancos, e-mail, etc.</p>
+      <textarea id="ignored-domains" placeholder="banco.com.br&#10;gmail.com"></textarea>
+      <div class="chips" id="ignored-chips"></div>
+    </div>
+
+    <div class="card">
+      <p class="card-title">Tamanho mínimo do grupo</p>
+      <p class="card-hint">Número mínimo de abas parecidas para formar um grupo.</p>
+      <div class="pill-group" id="min-group-size">
+        <label><input type="radio" name="mgs" value="2" /><span>2 abas</span></label>
+        <label><input type="radio" name="mgs" value="3" /><span>3 abas</span></label>
+        <label><input type="radio" name="mgs" value="4" /><span>4 abas</span></label>
+      </div>
+
+      <p class="card-title" style="margin-top:22px;">Cache de embeddings</p>
+      <p class="card-hint" style="margin-bottom:12px;">Páginas já processadas ficam com o vetor salvo localmente. Limpe se mudar de ideia sobre o que deveria ficar junto.</p>
+      <button class="action" id="clear-cache" type="button">Limpar cache</button>
+    </div>
+  </div>
+</div>
+
+<div class="savebar" id="savebar">
+  <div class="savebar-inner">
+    <span class="savebar-text">Você tem alterações não salvas</span>
+    <button class="save-btn" id="save">Salvar alterações</button>
+  </div>
+</div>
+
+<script type="module" src="./options.js"></script>
+</body>
+</html>
