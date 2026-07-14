@@ -6,6 +6,7 @@ IA que roda **inteiramente no navegador**, sem backend e sem enviar
 dados de navegação para lugar nenhum.
 
 - **Site:** https://stg.caliberda.com.br
+- **Chrome Web Store:** https://chromewebstore.google.com/detail/semantic-tab-grouper/illkdfiegklhcjogdhplihjekfjdocgk
 - **Repositório:** https://github.com/cesarkali/Semantic-Tab-Grouper
 
 ## Como funciona
