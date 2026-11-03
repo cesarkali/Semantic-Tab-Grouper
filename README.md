@@ -75,4 +75,4 @@ Depois, em `chrome://extensions`:
 
 ## Licença
 
-Ainda não definida.
+Código sob a licença [GPL-3.0](LICENSE): você pode estudar, modificar e redistribuir, desde que qualquer versão distribuída vá junto com o código-fonte completo, sob a mesma licença e com os créditos.

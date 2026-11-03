@@ -4,4 +4,4 @@ releases/
 .vite/
 *.log
 .DS_Store
-node_modules/
+vite.config.*.timestamp-*
